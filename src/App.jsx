@@ -1,7 +1,10 @@
+import LoginPage from "./Components/LoginPage.jsx"
 function App() {
  
 
-  return 
+  return (
+    <LoginPage/>
+  )
 }
 
 export default App

@@ -1,0 +1,20 @@
+.all-page {
+  background-image: url('../assets/blue-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blur {
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+}
+.Inner{
+  border: 1px solid black;
+}
