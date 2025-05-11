@@ -95,7 +95,7 @@ function LoginPage() {
         required: "Password is required",
         minLength: {
             value: 6,
-            message: "Şifre en az 6 karakter olmalı"
+            message: "Password must be at least 6 characters."
         }
     });
 

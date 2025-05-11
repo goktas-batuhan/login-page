@@ -10,3 +10,22 @@
   align-items: center;
   justify-content: center;
 }
+
+.congratz {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.return-batın button {
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: transparent;
+  color: inherit;
+ 
+
+}
+.return-batın{
+  font-size: 1.5rem;
+}
