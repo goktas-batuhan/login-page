@@ -1,0 +1,12 @@
+.all-succes-page {
+  background-image: url('../assets/blue-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

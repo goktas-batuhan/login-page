@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { Button, Form, FormText, Input, Label, FormGroup } from "reactstrap"
 import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router";
 import axios from "axios";
 import "./LoginPage.css"
 
-function App() {
+function LoginPage() {
     const {
         register,
         handleSubmit,
@@ -20,7 +21,7 @@ function App() {
         },
     });
 
-
+    let navigate = useNavigate();
 
     useEffect(() => {
         const savedEmail = localStorage.getItem("email") || "";
@@ -47,6 +48,7 @@ function App() {
             .then(function (response) {
                 console.log("token geldi ", response.data.token);
                 notifySucces()
+                navigate("/succes")
                 if (data.rememberMe) {
                     localStorage.setItem("email", data.email)
                     localStorage.setItem("password", data.password)
@@ -104,7 +106,7 @@ function App() {
     return (
         <div className="all-page">
             <div className="blur">
-                <ToastContainer/>
+                
                 <Form className="Inner" onSubmit={handleSubmit(onSubmit)}>
                     <FormGroup>
                         <h1 className="title">Login</h1>
@@ -161,4 +163,4 @@ function App() {
     )
 }
 
-export default App
+export default LoginPage
