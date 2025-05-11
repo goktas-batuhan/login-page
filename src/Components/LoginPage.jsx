@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { Button, Form, FormText, Input, Label, FormGroup } from "reactstrap"
+import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from "react-hook-form"
 import axios from "axios";
 import "./LoginPage.css"
+
 function App() {
     const {
         register,
@@ -35,7 +37,7 @@ function App() {
     const onSubmit = (data) => {
         console.log(data)
 
-        if (data.email.length == 0 || data.password.length == 0) return;
+        
 
         axios.post('https://reqres.in/api/login', data, {
             headers: {
@@ -44,6 +46,7 @@ function App() {
         })
             .then(function (response) {
                 console.log("token geldi ", response.data.token);
+                notifySucces()
                 if (data.rememberMe) {
                     localStorage.setItem("email", data.email)
                     localStorage.setItem("password", data.password)
@@ -62,6 +65,7 @@ function App() {
                 )
             })
             .catch(function (error) {
+                notifyFailed()
                 console.log(error);
             });
 
@@ -69,7 +73,12 @@ function App() {
 
     console.log("Form hataları:", errors);
 
-
+    const notifySucces = () => {
+        toast.success("Succesfully logined")
+    }
+    const notifyFailed = () => {
+        toast.error("Invalid email or username. Please try again.");
+    }
 
 
     const { ref, ...registerEmail } = register("email", {
@@ -95,6 +104,7 @@ function App() {
     return (
         <div className="all-page">
             <div className="blur">
+                <ToastContainer/>
                 <Form className="Inner" onSubmit={handleSubmit(onSubmit)}>
                     <FormGroup>
                         <h1 className="title">Login</h1>
