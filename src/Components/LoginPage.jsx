@@ -1,23 +1,69 @@
+import { useEffect } from "react";
 import { Button, Form, FormText, Input, Label, FormGroup } from "reactstrap"
 import { useForm } from "react-hook-form"
+import axios from "axios";
 import "./LoginPage.css"
 function App() {
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid },
+        formState: { errors },
         reset,
     } = useForm({
-        mode: 'onChange',
-        defaultValues:{
-            email:"",
-            password:"",
-        }
+        mode: "onChange",
+        defaultValues: {
+            email: "",
+            password: "",
+            rememberMe: false,
+        },
     });
 
 
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("email") || "";
+        const savedPassword = localStorage.getItem("password") || "";
+        const savedRemember = localStorage.getItem("rememberMe") === "true";
+
+        reset({
+            email: savedEmail,
+            password: savedPassword,
+            rememberMe: savedRemember,
+        });
+    }, [reset]);
+
     const onSubmit = (data) => {
         console.log(data)
+
+        if (data.email.length == 0 || data.password.length == 0) return;
+
+        axios.post('https://reqres.in/api/login', data, {
+            headers: {
+                'x-api-key': 'reqres-free-v1'
+            }
+        })
+            .then(function (response) {
+                console.log("token geldi ", response.data.token);
+                if (data.rememberMe) {
+                    localStorage.setItem("email", data.email)
+                    localStorage.setItem("password", data.password)
+                    localStorage.setItem("rememberMe", "true")
+                } else {
+                    localStorage.removeItem("email")
+                    localStorage.removeItem("password")
+                    localStorage.setItem("rememberMe", "false")
+                }
+                reset(
+                    {
+                        email: data.rememberMe ? data.email : "",
+                        password: data.rememberMe ? data.password : "",
+                        rememberMe: data.rememberMe,
+                    }
+                )
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
     }
 
@@ -36,16 +82,13 @@ function App() {
 
     const { ref: passwordRef, ...registerPassword } = register("password", {
         required: "Password is required",
-        validate: validatePassword
+        minLength: {
+            value: 6,
+            message: "Şifre en az 6 karakter olmalı"
+        }
     });
 
-    
-    function validatePassword(password) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return regex.test(password) || "Şifre en az 8 karakter, büyük harf, küçük harf, sayı ve özel karakter içermeli.";
-    }
-
-
+    const { ref: rememberRef, ...registerRemember } = register("rememberMe");
 
 
 
@@ -88,10 +131,14 @@ function App() {
 
                     </FormGroup>
                     <FormGroup check>
-                        <Input type="checkbox" />
-                        {' '}
                         <Label check>
-                            Remember me
+                            <Input
+                                type="checkbox"
+                                id="rememberMe"
+                                innerRef={rememberRef}
+                                {...registerRemember}
+                            />
+                            {" "}Remember me
                         </Label>
                     </FormGroup>
                     <Button type="submit" className="login-button">
